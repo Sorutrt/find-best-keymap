@@ -3,17 +3,18 @@
 using namespace std;
 
 #define KEYLANE 11
+#define RIGHTEST_LEFTY 5
+
 vector<vector<char>> keymap(3, vector<char>(KEYLANE));
 
-int RIGHTEST_LEFTY = 5; // 左手か右手かの判別に使う 左手の中で一番右の位置
+// 左手か右手かの判別に使う 左手の中で一番右の位置
 
 
 struct keydata {
-    int x;
-    int y;
+    int r; // row
+    int c; // column
     char keyname;
 };
-
 
 
 int ZXCV() { // エラーなら -1 を返す 正常終了は 0
@@ -40,7 +41,32 @@ void disp_keymap() {
         }
         cout << endl;
     }
-    cout << endl;
+    cout << "---------------------------" << endl;
+}
+
+
+// キーをセットする　埋まっていれば false を返す
+bool set_key(keydata kd) {
+    // if filled
+    if (keymap[kd.r][kd.c] != ' ') {
+        return false;
+    }
+    keymap[kd.r][kd.c] = kd.keyname;
+    return true;
+}
+bool set_keys(vector<keydata> kds) { // キーの塊をセットする　埋まっていれば false
+    for(int i=0; i<kds.size(); i++) {
+        // 最初に埋まってないかだけチェック　埋まってたらすぐ false を返す
+        int r = kds[i].r;
+        int c = kds[i].c;
+        if (keymap[r][c] != ' ') return false;
+    }
+    for(int i=0; i<kds.size(); i++) {
+        int r = kds[i].r;
+        int c = kds[i].c;
+        keymap[r][c] = kds[i].keyname;
+    }
+    return true;
 }
 
 // キーマップ初期化
@@ -57,56 +83,40 @@ void init_keymap() {
 void startup() {
     init_keymap();
     if (ZXCV()) cout << "zxcv filled" << endl;
+    set_key({r:1, c:5, keyname:'A'});
 }
-
-// キーをセットする　埋まっていれば false を返す
-bool set_key(keydata kd) {
-    // if filled
-    if (keymap[kd.x][kd.y] != ' ') {
-        return false;
-    }
-    keymap[kd.x][kd.y] = kd.keyname;
-    return true;
-}
-bool set_keys(vector<keydata> kds) { // キーの塊をセットする　埋まっていれば false
-    for(int i=0; i<kds.size(); i++) {
-        // 最初に埋まってないかだけチェック　埋まってたらすぐ false を返す
-        int x = kds[i].x;
-        int y = kds[i].y;
-        if (keymap[x][y] != ' ') return false;
-    }
-
-    for(int i=0; i<kds.size(); i++) {
-        int x = kds[i].x;
-        int y = kds[i].y;
-        keymap[x][y] = kds[i].keyname;
-    }
-    return true;
-}
-
 
 int main() {
-    startup();
-
-    // HJKL T字
-    for(int i=1; i<3; i++) {
-        for(int j=1; j<KEYLANE-3; j++) { // 小指を使いたくない
-            // 手が分割するなど使いにくいのだけ排除
-            if (j>=2 && j<=6) {
-                continue;
-            }
-
-            startup();
-
-            // hjkl
-            keydata kh = { x:i, y:j, keyname:'H' };
-            keydata kj = { x:i, y:j+1, keyname:'J' };
-            keydata kl = { x:i, y:j+2, keyname:'L' };
-            keydata kk = { x:i-1, y:j+1, keyname:'K' };
-            set_keys({kh, kj, kl, kk});
-
-            disp_keymap();
+    vector<vector<keydata>> hjkl_Patterns = {
+        {   // パターン1: T字
+            {r:1, c:1, keyname:'H'},
+            {r:1, c:2, keyname:'J'},
+            {r:1, c:3, keyname:'L'},
+            {r:0, c:2, keyname:'K'}
+        }, { // パターン2: 逆T字
+            {r:0, c:2, keyname:'H'},
+            {r:0, c:3, keyname:'K'},
+            {r:0, c:4, keyname:'L'},
+            {r:1, c:3, keyname:'J'}
+        }, { // パターン3: 逆T字右寄り
+            {r:0, c:2, keyname:'H'},
+            {r:0, c:3, keyname:'K'},
+            {r:0, c:4, keyname:'L'},
+            {r:1, c:4, keyname:'J'}
         }
+    };
+
+    for(int hjklp=0; hjklp<hjkl_Patterns.size(); hjklp++) {
+        startup();
+        if(!set_keys(hjkl_Patterns[hjklp])) continue;
+
+        // iueo
+        set_key({r:0, c:7, keyname:'I'});
+        set_key({r:1, c:6, keyname:'U'});
+        set_key({r:1, c:7, keyname:'O'});
+        set_key({r:1, c:8, keyname:'E'});
+
+        disp_keymap();
     }
 
     return 0;
