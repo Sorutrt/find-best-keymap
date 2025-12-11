@@ -79,7 +79,9 @@ void disp_keymap() {
         if(i==1) cout << ' ';  // row staggered
         if(i==2) cout << "  "; // row staggered
         for(int j=0; j<KEYLANE; j++) {
-            cout << keymap[i][j];
+            char c = keymap[i][j];
+            if (c=='H' || c=='J' || c=='K' || c=='L') cout << "\033[31m" << c << "\033[m";
+            else cout << keymap[i][j];
 
             if (j != KEYLANE) cout << "  "; // 最後でなければ区切る
         }
