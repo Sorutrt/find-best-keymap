@@ -80,9 +80,17 @@ void disp_keymap() {
         if(i==2) cout << "  "; // row staggered
         for(int j=0; j<KEYLANE; j++) {
             char c = keymap[i][j];
-            if (c=='H' || c=='J' || c=='K' || c=='L') cout << "\033[31m" << c << "\033[m";
-            else cout << keymap[i][j];
-
+            bool isHJKL = false;
+            bool isHOME = false; // ホームポジションのポチ
+            if (c=='H' || c=='J' || c=='K' || c=='L') isHJKL = true;
+            if (i==1 && (j==3 || j==6)) isHOME = true;
+            
+            if (isHJKL && isHOME) cout << "\033[4;31m";
+            else if(isHJKL) cout << "\033[31m";
+            else if(isHOME) cout << "\033[4m";
+            cout << keymap[i][j];
+            if(isHJKL || isHOME) cout << "\033[m";
+            
             if (j != KEYLANE) cout << "  "; // 最後でなければ区切る
         }
         cout << endl;
