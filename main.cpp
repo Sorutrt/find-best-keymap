@@ -49,7 +49,13 @@ const char consonants[] = {
 };
 
 vector<vector<keydata>> hjkl_Patterns = {
-    {   // パターン: T字
+    {
+        {r:0, c:1, keyname:'H'},
+        {r:0, c:2, keyname:'K'},
+        {r:0, c:3, keyname:'J'},
+        {r:0, c:4, keyname:'L'}
+
+    },{   // パターン: T字
         {r:1, c:1, keyname:'H'},
         {r:1, c:2, keyname:'J'},
         {r:1, c:3, keyname:'L'},
