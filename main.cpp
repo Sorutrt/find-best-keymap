@@ -175,6 +175,14 @@ void startup() {
     set_key({r:0, c:6, keyname:'F'});
     set_key({r:0, c:8, keyname:'Y'});
     set_key({r:0, c:9, keyname:'W'});
+
+    // 記号
+    set_key({r:0, c:10,  keyname:'['});
+    set_key({r:1, c:9, keyname:';'});
+    set_key({r:1, c:10, keyname:'-'});
+    set_key({r:2, c:7,  keyname:','});
+    set_key({r:2, c:8,  keyname:'.'});
+    set_key({r:2, c:9,  keyname:'/'});
 }
 
 int main() {
