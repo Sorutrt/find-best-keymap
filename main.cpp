@@ -166,9 +166,9 @@ void startup() {
 
     // aiueo
     set_key({r:1, c:5, keyname:'A'});
-    set_key({r:1, c:6, keyname:'U'});
+    set_key({r:1, c:6, keyname:'O'});
     set_key({r:1, c:7, keyname:'I'});
-    set_key({r:0, c:7, keyname:'O'});
+    set_key({r:0, c:7, keyname:'U'});
     set_key({r:1, c:8, keyname:'E'});
 
     set_key({r:0, c:5, keyname:'Q'});
